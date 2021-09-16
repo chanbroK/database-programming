@@ -1,13 +1,15 @@
+package database.programming.week3;
+
 import java.sql.*;
 
-public class App {
+public class MariaSQL {
     public static void main(final String[] args) throws SQLException {
-        final Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3307", "root", "1234");
+        Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "1234");
         // Each SQL can be executed a Statement instance
-        final Statement stmt = connection.createStatement();
+        Statement stmt = connection.createStatement();
         // DDL
         try {
-            stmt.executeUpdate("CREATE DATABASE db");
+            stmt.executeUpdate("CREATE OR REPLACE DATABASE db");
         } catch (final SQLException e) {
             System.out.println("DATABASE is already exist");
         }
@@ -27,12 +29,17 @@ public class App {
         stmt.executeUpdate("INSERT INTO loan VALUES ('L-93', 'Mianus', '500');");
 
         //DQL
-        final ResultSet resultSet = stmt.executeQuery("SELECT * FROM loan");
+//        ResultSet resultSet = stmt.executeQuery("SELECT loan_number, branch_name, amount FROM loan");
+//        while (resultSet.next()) {
+//            final String loan_number = resultSet.getString("loan_number");
+//            final String branch_name = resultSet.getString("branch_name");
+//            final String amount = resultSet.getString("amount");
+//            System.out.println(loan_number + "\t" + branch_name + "\t" + amount);
+//        }
+        ResultSet resultSet = stmt.executeQuery("SELECT AVG(amount) FROM loan");
         while (resultSet.next()) {
-            final String loan_number = resultSet.getString("loan_number");
-            final String branch_name = resultSet.getString("branch_name");
-            final String amount = resultSet.getString("amount");
-            System.out.println(loan_number + "\t" + branch_name + "\t" + amount);
+            String avg = resultSet.getString("AVG(amount)");
+            System.out.println(avg);
         }
         connection.close();
     }
