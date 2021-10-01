@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<accounts xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <account>
+        <account_number xsi:type="xsd:string">A-101</account_number>
+        <branch_name xsi:type="xsd:string">Downtown</branch_name>
+        <balance xsi:type="xsd:integer">500</balance>
+    </account>
+    <account>
+        <account_number xsi:type="xsd:string">A-102</account_number>
+        <branch_name xsi:type="xsd:string">Perryridge</branch_name>
+        <balance xsi:type="xsd:integer">400</balance>
+    </account>
+    <account>
+        <account_number xsi:type="xsd:string">A-201</account_number>
+        <branch_name xsi:type="xsd:string">Brighton</branch_name>
+        <balance xsi:type="xsd:integer">900</balance>
+    </account>
+    <account>
+        <account_number xsi:type="xsd:string">A-215</account_number>
+        <branch_name xsi:type="xsd:string">Mianus</branch_name>
+        <balance xsi:type="xsd:integer">700</balance>
+    </account>
+    <account>
+        <account_number xsi:type="xsd:string">A-217</account_number>
+        <branch_name xsi:type="xsd:string">Brighton</branch_name>
+        <balance xsi:type="xsd:integer">750</balance>
+    </account>
+    <account>
+        <account_number xsi:type="xsd:string">A-222</account_number>
+        <branch_name xsi:type="xsd:string">Redwood</branch_name>
+        <balance xsi:type="xsd:integer">700</balance>
+    </account>
+    <account>
+        <account_number xsi:type="xsd:string">A-305</account_number>
+        <branch_name xsi:type="xsd:string">Round Hill</branch_name>
+        <balance xsi:type="xsd:integer">350</balance>
+    </account>
+</accounts>
