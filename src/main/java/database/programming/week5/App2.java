@@ -17,6 +17,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,15 +65,24 @@ public class App2 {
         System.out.println(accountList);
 
         // Save in DB
-        Connection connection = DriverManager.getConnection("jdbc:maiadb://localhost:3307", "root", "1234");
+        Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3307", "root", "1234");
         Statement statement = connection.createStatement();
 
         // DDL
-        statement.executeUpdate("CREATE DATABASE account");
-        statement.executeUpdate("USE account");
-        statement.executeUpdate("CREATE TABLE account(account_number VARCHAR(50),branch_name VARCHAR(50), balance VARCHAR(50))");
+        statement.executeUpdate("CREATE DATABASE  IF NOT EXISTS db");
+        statement.executeUpdate("USE db");
+        statement.executeUpdate("CREATE OR REPLACE TABLE account(account_number VARCHAR(50),branch_name VARCHAR(50), balance VARCHAR(50))");
 
         // DML
+        for (Account account : accountList) {
+            String sql = "INSERT INTO account VALUES ('" + account.getAccountNumber() + "','" + account.getBranchName() + "','" + account.getBalance() + "');";
+            statement.executeUpdate(sql);
+        }
 
+        ResultSet rs = statement.executeQuery("SELECT * FROM account");
+        while (rs.next()) {
+            System.out.println(rs.getObject(1) + "," + rs.getObject(2) + "," + rs.getObject(3));
+        }
+        connection.close();
     }
 }
