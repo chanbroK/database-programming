@@ -1,0 +1,30 @@
+[
+  {
+    "customer_name": "Hayes",
+    "account_number": "A-102"
+  },
+  {
+    "customer_name": "Johnson",
+    "account_number": "A-101"
+  },
+  {
+    "customer_name": "Johnson",
+    "account_number": "A-201"
+  },
+  {
+    "customer_name": "Jones",
+    "account_number": "A-217"
+  },
+  {
+    "customer_name": "Lindsay",
+    "account_number": "A-222"
+  },
+  {
+    "customer_name": "Smith",
+    "account_number": "A-215"
+  },
+  {
+    "customer_name": "Turner",
+    "account_number": "A-305"
+  }
+]

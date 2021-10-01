@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class MariaSQL {
     public static void main(final String[] args) throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", "root", "1234");
+        Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3307", "root", "1234");
         // Each SQL can be executed a Statement instance
         Statement stmt = connection.createStatement();
         // DDL
@@ -31,15 +31,16 @@ public class MariaSQL {
         //DQL
 //        ResultSet resultSet = stmt.executeQuery("SELECT loan_number, branch_name, amount FROM loan");
 //        while (resultSet.next()) {
-//            final String loan_number = resultSet.getString("loan_number");
-//            final String branch_name = resultSet.getString("branch_name");
-//            final String amount = resultSet.getString("amount");
+//            String loan_number = resultSet.getString("loan_number");
+//            String branch_name = resultSet.getString("branch_name");
+//            String amount = resultSet.getString("amount");
 //            System.out.println(loan_number + "\t" + branch_name + "\t" + amount);
 //        }
+
         ResultSet resultSet = stmt.executeQuery("SELECT AVG(amount) FROM loan");
         while (resultSet.next()) {
             String avg = resultSet.getString("AVG(amount)");
-            System.out.println(avg);
+            System.out.println("AVG(amount) = " + avg);
         }
         connection.close();
     }

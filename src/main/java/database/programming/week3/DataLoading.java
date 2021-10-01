@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class DataLoading {
     public static void main(String[] args) throws IOException {
-        BufferedReader r = new BufferedReader(new FileReader("D:\\project\\database-programming\\src\\main\\resources\\loan.txt"));
+        BufferedReader r = new BufferedReader(new FileReader("D:\\project\\personal\\database-programming\\src\\main\\resources\\loan.txt"));
 
         ArrayList<Loan> loanList = new ArrayList<>();
         while (true) {
@@ -23,7 +23,7 @@ public class DataLoading {
         for (Loan loan : loanList) {
             System.out.println(loan);
         }
-        r = new BufferedReader(new FileReader("D:\\project\\database-programming\\src\\main\\resources\\borrower.txt"));
+        r = new BufferedReader(new FileReader("D:\\project\\personal\\database-programming\\src\\main\\resources\\borrower.txt"));
         ArrayList<Borrower> borrowerList = new ArrayList<>();
         while (true) {
             String line = r.readLine();
