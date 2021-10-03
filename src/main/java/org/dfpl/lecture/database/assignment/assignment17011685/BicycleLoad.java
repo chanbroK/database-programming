@@ -1,4 +1,4 @@
-package database.programming.assignment;
+package org.dfpl.lecture.database.assignment.assignment17011685;
 
 public class BicycleLoad {
     private final String name;
@@ -73,19 +73,19 @@ public class BicycleLoad {
 
     @Override
     public String toString() {
-        return "BicycleLoad{" +
+        return
                 "name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", startPoint='" + startPoint + '\'' +
-                ", endPoint='" + endPoint + '\'' +
-                ", stopoverPoint='" + stopoverPoint + '\'' +
-                ", isTwoWay=" + isTwoWay +
-                ", length=" + length +
-                ", normalWidth=" + normalWidth +
-                ", bicycleWidth=" + bicycleWidth +
-                ", installYear=" + installYear +
-                ", texture='" + texture + '\'' +
-                "}\n";
+                        ", type='" + type + '\'' +
+                        ", startPoint='" + startPoint + '\'' +
+                        ", endPoint='" + endPoint + '\'' +
+                        ", stopoverPoint='" + stopoverPoint + '\'' +
+                        ", isTwoWay=" + isTwoWay +
+                        ", length=" + length +
+                        ", normalWidth=" + normalWidth +
+                        ", bicycleWidth=" + bicycleWidth +
+                        ", installYear=" + installYear +
+                        ", texture='" + texture + '\'' +
+                        "\n";
     }
 
 }
