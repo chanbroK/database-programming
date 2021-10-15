@@ -16,6 +16,7 @@ public class DROPTABLE {
 
         sm.executeUpdate("CREATE DATABASE IF NOT EXISTS db");
         // 현재 사용중인 DB 이름 반환
+        System.out.println(connection.getCatalog());
         sm.executeUpdate("USE db");
 //        String sql = "CREATE OR REPLACE TABLE customer2(customer VARCHAR(50),customer_street VARCHAR(50),customer_city VARCHAR(50),latitude DOUBLE,longitude DOUBLE, last_update DATE)";
 
