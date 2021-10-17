@@ -1,0 +1,8 @@
+Adams,Perryridge,1500
+Brown,Perryridge,1300
+Gopal,Perryridge,5300
+Johnson,Downtown,1500
+Loreena,Downtown,1300
+Peterson,Downtown,2500
+Rao,Austin,1500
+Sato,Austin,1600
