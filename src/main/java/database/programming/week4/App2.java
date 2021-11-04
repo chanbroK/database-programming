@@ -11,7 +11,7 @@ import java.util.List;
 
 public class App2 {
     public static void main(String[] args) throws IOException {
-        BufferedReader r = new BufferedReader(new FileReader("D:\\project\\personal\\database-programming\\src\\main\\resources\\depositor.json"));
+        BufferedReader r = new BufferedReader(new FileReader("D:\\project\\database-programming\\src\\main\\resources\\depositor.json"));
         String jsonString = "";
         while (true) {
             String line = r.readLine();
@@ -23,8 +23,9 @@ public class App2 {
         r.close();
 
         JSONArray array = new JSONArray(jsonString);
-        System.out.println(array.toString(4));
-
+        System.out.println(array);
+        JSONObject s = new JSONObject().put("key", "value");
+        System.out.println("insert into j values('" + s + "')");
         List<Depositor> depositorList = new ArrayList<>();
 
         for (int i = 0; i < array.length(); i++) {

@@ -51,6 +51,7 @@ public class App2 {
         // getElement
         NodeList nodeList = doc.getElementsByTagName("account");
         List<Account> accountList = new ArrayList<>();
+        
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             Element account = (Element) node;

@@ -23,7 +23,8 @@ public class App {
         Element accountNumber = doc.createElement("account_number");
         accountNumber.setAttribute("xsi:type", "xsd:string");
         accountNumber.setTextContent("A-101");
-
+        root.appendChild(accountNumber);
+        
         Element branchName = doc.createElement("branch_name");
         branchName.setAttribute("xsi:type", "xsd:string");
         branchName.setTextContent("Downtown");

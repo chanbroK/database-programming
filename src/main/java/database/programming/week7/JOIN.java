@@ -19,7 +19,7 @@ public class JOIN {
         DataRetriever.getAllData("borrower", stmt);
         DataRetriever.getAllData("loan", stmt);
 
-        String sql = "SELECT * FROM borrower CROSS JOIN loan;";
+        String sql = "SELECT * FROM borrower  JOIN loan;";
         DataRetriever.showResultSet(sql, stmt.executeQuery(sql));
 
         sql = "SELECT * FROM borrower CROSS JOIN loan WHERE branch_name = 'Perryridge';";

@@ -7,8 +7,11 @@ import java.util.ArrayList;
 
 public class DataLoading {
     public static void main(String[] args) throws IOException {
-        BufferedReader r = new BufferedReader(new FileReader("D:\\project\\personal\\database-programming\\src\\main\\resources\\loan.txt"));
-
+        BufferedReader r = new BufferedReader(new FileReader("D:\\project\\database-programming\\src\\main\\resources\\loan.txt"));
+        String d = "123";
+        System.out.println(d.startsWith("#"));
+        int a = Integer.parseInt(d);
+        System.out.println(a);
         ArrayList<Loan> loanList = new ArrayList<>();
         while (true) {
             String line = r.readLine();

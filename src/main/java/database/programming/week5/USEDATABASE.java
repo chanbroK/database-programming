@@ -8,7 +8,7 @@ public class USEDATABASE {
     public static void main(String[] args) throws Exception {
         String id = "root";
         String pw = "1234";
-        Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3307", id, pw);
+        Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", id, pw);
         // Each SQL can be executed with a Statement instance
         Statement sm = connection.createStatement();
 

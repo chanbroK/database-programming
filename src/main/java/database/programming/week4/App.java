@@ -16,7 +16,7 @@ public class App {
         arr.put(0f);
         arr.put(0);
         arr.put(0l);
-        System.out.println(arr);
+        System.out.println(arr.toString(4));
 
 //        obj.put("array", arr);
 //        System.out.println(obj);
