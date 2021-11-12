@@ -1,0 +1,38 @@
+package database.programming.week11.ex1;
+
+import database.programming.week10.IncreaseThread2;
+
+import java.util.concurrent.Semaphore;
+
+public class ExampleWithSemaphore {
+    public static int count = 0;
+    public static Semaphore semaphore = new Semaphore(1);
+
+    public static void main(String[] args) throws InterruptedException {
+
+        Runnable r = () -> {
+            for (int i = 0; i < 10000; i++) {
+                try {
+                    // 키를 얻고
+                    semaphore.acquire();
+                    // Critical Section 접근 (공유되는 변수)
+                    count++;
+                    // 키를 반납
+                    semaphore.release();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        // Thread마다 10000씩 증가
+        new Thread(r).start();
+        new Thread(r).start();
+        new Thread(r).start();
+        new Thread(r).start();
+
+        // sleep 3 secs 각 쓰레드가 독립적으로 작동하기 때문에 main이 먼저 작업 끝나는 것을 방지
+        Thread.sleep(5000);
+        // Semaphore를 통해 40000이 찍힐 수 있음
+        System.out.println(count);
+    }
+}

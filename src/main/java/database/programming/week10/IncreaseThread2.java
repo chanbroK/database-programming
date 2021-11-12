@@ -4,12 +4,12 @@ public class IncreaseThread2 extends Thread {
     public void run() {
         for (int i = 0; i < 10000; i++) {
             try {
-                App2.semaphore.acquire();
+                ExampleWithSemaphore.semaphore.acquire();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            App2.count++;
-            App2.semaphore.release();
+            ExampleWithSemaphore.count++;
+            ExampleWithSemaphore.semaphore.release();
         }
     }
 }

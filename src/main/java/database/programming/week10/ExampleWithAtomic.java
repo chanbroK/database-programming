@@ -2,7 +2,7 @@ package database.programming.week10;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class App3 {
+public class ExampleWithAtomic {
     //  AtomicInteger 사용
     public static AtomicInteger count = new AtomicInteger(0);
 

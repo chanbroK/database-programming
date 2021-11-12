@@ -2,7 +2,7 @@ package database.programming.week10;
 
 import java.util.concurrent.Semaphore;
 
-public class App2 {
+public class ExampleWithSemaphore {
     public static int count = 0;
 
     // Semaphore 적용 -> 화장실 키와 같은 느낌, release 할때 까지 다른 쓰레드는 사용 불가

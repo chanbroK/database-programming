@@ -1,6 +1,6 @@
 package database.programming.week10;
 
-public class App {
+public class ExampleWithNothing {
     public static int count = 0;
 
     public static void main(String[] args) throws InterruptedException {
