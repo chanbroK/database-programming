@@ -9,16 +9,16 @@ public class SixWayBPlusTree implements NavigableSet<Integer> {
     private final int max_children = m;
     private final int max_keys = m - 1;
     private final int min_keys = (int) (Math.ceil((double) m / 2)) - 1;
-
-    private final SixWayBPlusTreeNode root;
-    private final int size;
     private final LinkedList<SixWayBPlusTreeNode> leafList;
 
-    // 생성자
+    private SixWayBPlusTreeNode root;
+    private int size;
+
+    // Constructor
     public SixWayBPlusTree() {
-        root = null;
-        size = 0;
-        leafList = new LinkedList<>();
+        this.root = null;
+        this.size = 0;
+        this.leafList = new LinkedList<>();
     }
 
     /**
@@ -84,6 +84,18 @@ public class SixWayBPlusTree implements NavigableSet<Integer> {
         // TODO Auto-generated method stub
     }
 
+    // 노드 삽입
+    public SixWayBPlusTreeNode insertNode(int parent_pos, int val, SixWayBPlusTreeNode node, SixWayBPlusTreeNode parent) {
+        int pos;
+        for (pos = 0; pos < node.getKeyList().size(); pos++) {
+            if (val == node.getKeyList().get(pos)) {
+                // 중복된 key가 존재 -> 허용 X
+                this.size--;
+                return node;
+            }
+        }
+    }
+
     @Override
     public Comparator<? super Integer> comparator() {
         // TODO Auto-generated method stub
@@ -132,7 +144,13 @@ public class SixWayBPlusTree implements NavigableSet<Integer> {
 
     @Override
     public boolean add(Integer e) {
-        // TODO Auto-generated method stub
+        this.size++;
+        if (this.root == null) {
+            this.root = new SixWayBPlusTreeNode(e);
+//            this.root.isLeaf = true;
+        } else {
+            root = insertNode(0, 3, root, root);
+        }
         return false;
     }
 

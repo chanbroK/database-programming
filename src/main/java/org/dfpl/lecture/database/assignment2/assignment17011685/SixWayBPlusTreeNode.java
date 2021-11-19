@@ -14,7 +14,15 @@ public class SixWayBPlusTreeNode {
     public SixWayBPlusTreeNode() {
         keyList = new ArrayList<>();
         children = new ArrayList<>();
-        isLeaf = true;
+        isLeaf = false;
+        parent = null;
+    }
+
+    public SixWayBPlusTreeNode(int val) {
+        keyList = new ArrayList<>();
+        keyList.add(val);
+        children = new ArrayList<>();
+        isLeaf = false;
         parent = null;
     }
 
