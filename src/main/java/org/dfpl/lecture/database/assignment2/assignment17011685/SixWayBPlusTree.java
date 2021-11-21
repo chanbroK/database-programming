@@ -94,6 +94,7 @@ public class SixWayBPlusTree implements NavigableSet<Integer> {
                 return node;
             }
         }
+        return null;
     }
 
     @Override
