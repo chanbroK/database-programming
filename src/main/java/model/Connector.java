@@ -11,7 +11,7 @@ public class Connector {
     private Statement stmt;
 
     public Connector(String id, String password, String dbName) throws SQLException {
-        connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306", id, password);
+        connection = DriverManager.getConnection("jdbc:mariadb://localhost:3307", id, password);
         // Each SQL can be executed with a Statement instance
         stmt = connection.createStatement();
         // DDL
