@@ -145,13 +145,22 @@ public class SixWayBPlusTree implements NavigableSet<Integer> {
 
     @Override
     public boolean add(Integer e) {
-        this.size++;
+        SixWayBPlusTreeLeafNode leaf;
         if (this.root == null) {
-            this.root = new SixWayBPlusTreeNode(e);
-//            this.root.isLeaf = true;
+            // 빈 트리
+            this.root = new SixWayBPlusTreeLeafNode();
+            leaf = (SixWayBPlusTreeLeafNode) this.root;
         } else {
-            root = insertNode(0, 3, root, root);
+            // 위치 찾기
+            SixWayBPlusTreeNode travelNode = this.root;
+            while (travelNode instanceof SixWayBPlusTreeInnerNode) {
+                int nextPos = ((SixWayBPlusTreeInnerNode) travelNode).findNewKeyPos(e);
+                travelNode = ((SixWayBPlusTreeInnerNode) travelNode).childList.get(nextPos);
+            }
+            leaf = (SixWayBPlusTreeLeafNode) travelNode;
         }
+        leaf.insertKey(e);
+
         return false;
     }
 
@@ -281,5 +290,22 @@ public class SixWayBPlusTree implements NavigableSet<Integer> {
         // TODO Auto-generated method stub
         return null;
     }
+
+    public void printTree(FiveWayBTreeNode node, int level) {
+        if (node == null) {
+            System.out.println("Empty");
+        } else {
+            System.out.printf("Level %d ", level);
+            for (int i = 0; i < node.getKeyList().size(); i++) {
+                System.out.printf("|%d|", node.getKeyList().get(i));
+            }
+            System.out.printf("\n");
+            level++;
+            for (int i = 0; i < node.getChildren().size(); i++) {
+                printTree(node.getChildren().get(i), level);
+            }
+        }
+    }
+
 
 }

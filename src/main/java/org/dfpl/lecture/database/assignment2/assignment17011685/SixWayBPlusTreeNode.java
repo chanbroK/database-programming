@@ -5,25 +5,19 @@ import java.util.List;
 
 public class SixWayBPlusTreeNode {
 
-    boolean isLeaf;
+    final protected int maxKey = 6;
+    // TODO leftSibling 과 rightSibling 을 필요할때 구해서 사용하자
+    protected SixWayBPlusTreeNode leftSibling;
+    protected SixWayBPlusTreeNode rightSibling;
     // Data Abstraction은 예시일 뿐 자유롭게 B+ Tree의 범주 안에서 어느정도 수정가능
-    private SixWayBPlusTreeNode parent;
-    private List<Integer> keyList;
-    private List<SixWayBPlusTreeNode> children;
+    protected SixWayBPlusTreeNode parent;
+    protected List<Integer> keyList;
 
     public SixWayBPlusTreeNode() {
-        keyList = new ArrayList<>();
-        children = new ArrayList<>();
-        isLeaf = false;
-        parent = null;
-    }
-
-    public SixWayBPlusTreeNode(int val) {
-        keyList = new ArrayList<>();
-        keyList.add(val);
-        children = new ArrayList<>();
-        isLeaf = false;
-        parent = null;
+        this.keyList = new ArrayList<>();
+        this.parent = null;
+        this.leftSibling = null;
+        this.rightSibling = null;
     }
 
     // Getters and Setters
@@ -43,11 +37,25 @@ public class SixWayBPlusTreeNode {
         this.keyList = keyList;
     }
 
-    public List<SixWayBPlusTreeNode> getChildren() {
-        return children;
+    public SixWayBPlusTreeNode getLeftSibling() {
+        return leftSibling;
     }
 
-    public void setChildren(List<SixWayBPlusTreeNode> children) {
-        this.children = children;
+    public void setLeftSibling(SixWayBPlusTreeNode leftSibling) {
+        this.leftSibling = leftSibling;
+    }
+
+    public SixWayBPlusTreeNode getRightSibling() {
+        return rightSibling;
+    }
+
+    public void setRightSibling(SixWayBPlusTreeNode rightSibling) {
+        this.rightSibling = rightSibling;
+    }
+
+    // KeyList 가 가득 찼는지 확인
+    public boolean isOverflow() {
+        // TODO isOverflow -> isFull , 조건문 수정
+        return this.keyList.size() == this.maxKey;
     }
 }
