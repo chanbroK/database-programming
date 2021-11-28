@@ -461,14 +461,13 @@ public class MyTree implements NavigableSet<Integer> {
 
     class BPlusTreeIterator implements Iterator<Integer> {
         MyNode curNode;
-        int idx;
+        int keyIdx;
+        int listIdx;
 
         public BPlusTreeIterator() { // 시작점 : 최소값
-            curNode = root;
-            while (!curNode.isLeaf) {
-                curNode = curNode.getChildren().get(0);
-                idx = 0;
-            }
+            keyIdx = 0;
+            listIdx = 0;
+            curNode = leafList.get(listIdx);
         }
 
         @Override
@@ -476,39 +475,20 @@ public class MyTree implements NavigableSet<Integer> {
             return curNode != null && size != 0;
         }
 
-        public void movePointer() {
-            if (!curNode.isLeaf && curNode.getChildren().size() > idx) {
-                // 자식 이동
-                curNode = curNode.getChildren().get(idx);
-                idx = 0;
-                if (!curNode.isLeaf) {
-                    movePointer();
-                }
-            } else if (curNode.getKeyList().size() <= idx) {
-                // KeyList의 마지막이므로 부모 이동
-                if (curNode == root) {
-                    // 현재 root일때
-                    curNode = curNode.getParent();
-                    return;
-                } else {
-                    //부모 이동
-                    idx = curNode.getParent().getChildren().indexOf(curNode); // 현재 자식의 위치
-                    curNode = curNode.getParent();
-                    if (curNode.getKeyList().size() <= idx) {
-                        //다음 key로 이동
-                        idx++;
-                        movePointer();
-                    }
-                }
-            }
-        }
 
         @Override
         public Integer next() {
             Integer result = null;
-            result = curNode.getKeyList().get(idx);
-            idx++;
-            movePointer();
+            result = curNode.getKeyList().get(keyIdx);
+            keyIdx++;
+            if (keyIdx == curNode.getKeyList().size()) {
+                if (listIdx + 1 == leafList.size()) {
+                    curNode = null;
+                } else {
+                    curNode = leafList.get(++listIdx);
+                    keyIdx = 0;
+                }
+            }
             return result;
         }
     }

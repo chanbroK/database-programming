@@ -18,15 +18,6 @@ public class App {
         System.out.println();
         bpTree.inorderTraverse();
 
-        //
-
-        Iterator<Integer> iter = bpTree.iterator();
-        System.out.println("iter");
-        while (iter.hasNext()) {
-            System.out.println(iter.next());
-        }
-        System.exit(1);
-        //
         System.out.println("Assignment 5: ");
 
         ArrayList<Integer> list = new ArrayList<Integer>();
@@ -52,7 +43,6 @@ public class App {
         while (treeIterator.hasNext() && yourBTreeIterator.hasNext()) {
             Integer a = treeIterator.next();
             Integer b = yourBTreeIterator.next();
-            System.out.println(a + ":" + b);
             if (!a.equals(b)) {
                 isPass = false;
                 break;
