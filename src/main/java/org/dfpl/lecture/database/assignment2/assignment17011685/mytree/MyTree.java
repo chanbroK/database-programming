@@ -9,7 +9,7 @@ public class MyTree implements NavigableSet<Integer> {
     final int m = 6;
     final int max_children = m;
     final int max_keys = m - 1;
-    final int main_keys = (int) (Math.ceil(m / 2.)) - 1;
+    final int min_keys = (int) (Math.ceil(m / 2.)) - 1;
     // TODO implement leafList
     private final LinkedList<MyNode> leafList;
     private MyNode root;
@@ -124,6 +124,56 @@ public class MyTree implements NavigableSet<Integer> {
                     System.out.println(node.getKeyList().get(i));
                 }
             }
+        }
+    }
+
+    // #updateParent
+    public void updateParent(MyNode node, Integer key) {
+        if (node == null) {
+            //TODO
+        }
+    }
+
+    // #deleteInNode
+    public void deleteKey(MyNode node, Integer key) {
+        if (node.isLeaf) {
+            // leaf
+            node.getKeyList().remove(key);
+            if (node.getKeyList().size() < min_keys) { //min key 규칙 위반
+                rebalancingTree(node, pos)
+
+            }
+        } else {
+            // not leaf
+
+        }
+    }
+
+    // #findNode
+    public MyNode findNode(Integer key) {
+        MyNode node = root;
+        if (root == null) {
+            // 빈 트리
+            return null;
+        }
+        while (true) {
+            int pos;
+            for (pos = 0; pos < node.getKeyList().size(); pos++) {
+                if (node.getKeyList().get(pos).equals(key) && node.isLeaf) {
+                    // 리프노드일때 종료
+                    return node;
+                } else if (node.getKeyList().get(pos) > key && !node.isLeaf) {
+                    // 왼쪽 자식 노드로 이동
+                    node = node.getChildren().get(pos);
+                }
+                // pos 이동
+            }
+            if (node.isLeaf) {
+                // 찾지 못함
+                return null;
+            }
+            // 오른쪽 자식 노드로 이동
+            node = node.getChildren().get(pos);
         }
     }
 
@@ -334,7 +384,12 @@ public class MyTree implements NavigableSet<Integer> {
 
     @Override
     public boolean remove(Object o) {
-        // TODO Auto-generated method stub
+        MyNode target = findNode((Integer) o);
+        if (target != null) {
+            // 빈 트리가 아니고 삭제할 노드를 찾았을 때
+            deleteKey((Integer) o);
+            return true;
+        }
         return false;
     }
 
