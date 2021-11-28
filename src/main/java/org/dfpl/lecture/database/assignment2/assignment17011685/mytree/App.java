@@ -12,15 +12,21 @@ public class App {
             bpTree.add(i);
         }
 
-
-        bpTree.printTree(bpTree.getRoot(), 0);
-
         bpTree.getNode(11);
         System.out.println();
         bpTree.getNode(22);
         System.out.println();
         bpTree.inorderTraverse();
 
+        //
+
+        Iterator<Integer> iter = bpTree.iterator();
+        System.out.println("iter");
+        while (iter.hasNext()) {
+            System.out.println(iter.next());
+        }
+        System.exit(1);
+        //
         System.out.println("Assignment 5: ");
 
         ArrayList<Integer> list = new ArrayList<Integer>();
@@ -44,7 +50,10 @@ public class App {
         Iterator<Integer> yourBTreeIterator = yourBTree.iterator();
         boolean isPass = true;
         while (treeIterator.hasNext() && yourBTreeIterator.hasNext()) {
-            if (!treeIterator.next().equals(yourBTreeIterator.next())) {
+            Integer a = treeIterator.next();
+            Integer b = yourBTreeIterator.next();
+            System.out.println(a + ":" + b);
+            if (!a.equals(b)) {
                 isPass = false;
                 break;
             }
@@ -59,7 +68,10 @@ public class App {
         yourBTreeIterator = yourBTree.iterator();
         isPass = true;
         while (treeIterator.hasNext() && yourBTreeIterator.hasNext()) {
-            if (!treeIterator.next().equals(yourBTreeIterator.next())) {
+            Integer a = treeIterator.next();
+            Integer b = yourBTreeIterator.next();
+            System.out.println(a + ":" + b);
+            if (!a.equals(b)) {
                 isPass = false;
                 break;
             }

@@ -273,14 +273,19 @@ public class MyTree implements NavigableSet<Integer> {
     @Override
     public Integer first() {
         MyNode node = root;
-
-        return null;
+        while (!node.isLeaf) {
+            node = node.getChildren().get(0);
+        }
+        return node.getKeyList().get(0);
     }
 
     @Override
     public Integer last() {
-        // TODO Auto-generated method stub
-        return null;
+        MyNode node = root;
+        while (!node.isLeaf) {
+            node = node.getChildren().get(node.getChildren().size() - 1);
+        }
+        return node.getKeyList().get(node.getKeyList().size() - 1);
     }
 
     @Override
@@ -401,9 +406,9 @@ public class MyTree implements NavigableSet<Integer> {
 
     @Override
     public Iterator<Integer> iterator() {
-        // TODO Auto-generated method stub
-        return null;
+        return new BPlusTreeIterator();
     }
+
 
     @Override
     public NavigableSet<Integer> descendingSet() {
@@ -454,4 +459,57 @@ public class MyTree implements NavigableSet<Integer> {
         return null;
     }
 
+    class BPlusTreeIterator implements Iterator<Integer> {
+        MyNode curNode;
+        int idx;
+
+        public BPlusTreeIterator() { // 시작점 : 최소값
+            curNode = root;
+            while (!curNode.isLeaf) {
+                curNode = curNode.getChildren().get(0);
+                idx = 0;
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return curNode != null && size != 0;
+        }
+
+        public void movePointer() {
+            if (!curNode.isLeaf && curNode.getChildren().size() > idx) {
+                // 자식 이동
+                curNode = curNode.getChildren().get(idx);
+                idx = 0;
+                if (!curNode.isLeaf) {
+                    movePointer();
+                }
+            } else if (curNode.getKeyList().size() <= idx) {
+                // KeyList의 마지막이므로 부모 이동
+                if (curNode == root) {
+                    // 현재 root일때
+                    curNode = curNode.getParent();
+                    return;
+                } else {
+                    //부모 이동
+                    idx = curNode.getParent().getChildren().indexOf(curNode); // 현재 자식의 위치
+                    curNode = curNode.getParent();
+                    if (curNode.getKeyList().size() <= idx) {
+                        //다음 key로 이동
+                        idx++;
+                        movePointer();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public Integer next() {
+            Integer result = null;
+            result = curNode.getKeyList().get(idx);
+            idx++;
+            movePointer();
+            return result;
+        }
+    }
 }
