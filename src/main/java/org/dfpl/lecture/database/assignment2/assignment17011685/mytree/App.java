@@ -12,6 +12,13 @@ public class App {
             bpTree.add(i);
         }
 
+        ////
+        System.out.println(bpTree.remove(19));
+        System.out.println(bpTree.remove(1));
+        bpTree.printTree(bpTree.getRoot(), 0);
+        System.exit(1);
+        ////
+
         bpTree.getNode(11);
         System.out.println();
         bpTree.getNode(22);

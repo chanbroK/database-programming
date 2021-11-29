@@ -60,6 +60,7 @@ public class MyTree implements NavigableSet<Integer> {
                     // 왼쪽 자식 노드로 이동
                     System.out.println("less than to " + node.getKeyList().get(pos));
                     node = node.getChildren().get(pos);
+                    pos = -1;
                 }
                 // pos 이동
             }
@@ -128,9 +129,13 @@ public class MyTree implements NavigableSet<Integer> {
     }
 
     // #updateParent
-    public void updateParent(MyNode node, Integer key) {
-        if (node == null) {
-            //TODO
+    public void updateParent(MyNode node, Integer oldKey, Integer newKey) {
+        if (node != null) {
+            if (node.getKeyList().contains(oldKey)) {
+                node.getKeyList().set(node.getKeyList().indexOf(oldKey), newKey);
+                return;
+            }
+            updateParent(node.getParent(), oldKey, newKey);
         }
     }
 
@@ -138,14 +143,16 @@ public class MyTree implements NavigableSet<Integer> {
     public void deleteKey(MyNode node, Integer key) {
         if (node.isLeaf) {
             // leaf
-            node.getKeyList().remove(key);
             if (node.getKeyList().size() < min_keys) { //min key 규칙 위반
-                rebalancingTree(node, pos)
-
+                //TODO balancing
+            } else {
+                if (node.getKeyList().indexOf(key) == 0) { // 부모 노드 갱신
+                    updateParent(node.getParent(), key, node.getKeyList().get(1));
+                }
             }
+            node.getKeyList().remove(key);
         } else {
             // not leaf
-
         }
     }
 
@@ -165,6 +172,7 @@ public class MyTree implements NavigableSet<Integer> {
                 } else if (node.getKeyList().get(pos) > key && !node.isLeaf) {
                     // 왼쪽 자식 노드로 이동
                     node = node.getChildren().get(pos);
+                    pos = -1;
                 }
                 // pos 이동
             }
@@ -387,7 +395,7 @@ public class MyTree implements NavigableSet<Integer> {
         MyNode target = findNode((Integer) o);
         if (target != null) {
             // 빈 트리가 아니고 삭제할 노드를 찾았을 때
-            deleteKey((Integer) o);
+            deleteKey(target, (Integer) o);
             return true;
         }
         return false;
