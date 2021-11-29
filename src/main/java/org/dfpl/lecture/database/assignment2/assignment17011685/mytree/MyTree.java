@@ -2,7 +2,7 @@ package org.dfpl.lecture.database.assignment2.assignment17011685.mytree;
 
 import java.util.*;
 
-@SuppressWarnings("unused")
+// TODO 주석 최대한 영어로
 public class MyTree implements NavigableSet<Integer> {
 
     // Data Abstraction은 예시일 뿐 자유롭게 B+ Tree의 범주 안에서 어느정도 수정가능
@@ -10,12 +10,11 @@ public class MyTree implements NavigableSet<Integer> {
     final int max_children = m;
     final int max_keys = m - 1;
     final int min_keys = (int) (Math.ceil(m / 2.)) - 1;
-    // TODO implement leafList
     private final LinkedList<MyNode> leafList;
     private MyNode root;
     private int size;
 
-    // 생성자
+    // Constructor
     public MyTree() {
         root = null;
         size = 0;
@@ -111,6 +110,10 @@ public class MyTree implements NavigableSet<Integer> {
     /////////////////////////
     /////////#helper/////////
     /////////////////////////
+    // #checkMinKey
+    public boolean checkMinKey(MyNode node) {
+        return node.getKeyList().size() > min_keys;
+    }
 
     // #recursiveInorderTraverse
     public void recursiveInorderTraverse(MyNode node) {
@@ -139,20 +142,102 @@ public class MyTree implements NavigableSet<Integer> {
         }
     }
 
+    // #borrowFromLeft
+    public void borrowFromLeft(MyNode node, int pos) {
+        Integer PLV = node.getKeyList().get(pos - 1);
+        int size = node.getChildren().get(pos - 1).getKeyList().size(); // left sibling key size
+        Integer LV = node.getChildren().get(pos - 1).getKeyList().get(size - 1);
+        // move key
+        node.getChildren().get(pos).getKeyList().add(0, PLV); // PLV -> T
+        node.getKeyList().set(pos - 1, LV); // LV -> T
+        node.getChildren().get(pos - 1).getKeyList().remove(LV);
+        if (node.getChildren().get(pos).isLeaf) {
+            node.getChildren().get(pos).getKeyList().set(0, LV);
+        } else {
+            //move child
+            size = node.getChildren().get(pos - 1).getChildren().size();
+            MyNode LC = node.getChildren().get(pos - 1).getChildren().get(size - 1);
+            node.getChildren().get(pos).getChildren().add(0, LC);
+            LC.setParent(node.getChildren().get(pos));
+            node.getChildren().get(pos - 1).getChildren().remove(LC);
+        }
+    }
+
+    // #borrowFromRight
+    public void borrowFromRight(MyNode node, int pos) {
+        // move key
+        Integer PRV = node.getKeyList().get(pos);
+        Integer RV = node.getChildren().get(pos + 1).getKeyList().get(0);
+        node.getChildren().get(pos).getKeyList().add(PRV); // PRV -> T
+        node.getKeyList().set(pos, RV); // RV -> PRV
+        node.getChildren().get(pos + 1).getKeyList().remove(RV);
+        // parent key update
+        if (node.getChildren().get(pos).isLeaf) {
+            updateParent(node, RV, node.getChildren().get(pos + 1).getKeyList().get(0));
+        } else {
+            //move child
+            MyNode RC = node.getChildren().get(pos + 1).getChildren().get(0);
+            node.getChildren().get(pos).getChildren().add(RC);
+            RC.setParent(node.getChildren().get(pos));
+            node.getChildren().get(pos + 1).getChildren().remove(RC);
+        }
+    }
+
+    // #mergeNode
+    public void mergeNode(MyNode node, int rightPos, int leftPos) {
+        // merging at left child
+        MyNode RC = node.getChildren().get(rightPos);
+        MyNode LC = node.getChildren().get(leftPos);
+        LC.getKeyList().addAll(RC.getKeyList()); // move RC key list to LC
+        LC.getChildren().addAll(RC.getChildren()); // move RC child list to LC
+        for (MyNode child : RC.getChildren()) {
+            child.setParent(LC);
+        }
+        //clear
+        node.getChildren().remove(RC);
+        node.getKeyList().remove(leftPos);
+        leafList.remove(RC);
+    }
+
+    // #balancing
+    public void balancing(MyNode node, int childPos) {// borrow or merge
+        if (childPos == 0) { // not exist left sibling
+            if (checkMinKey(node.getChildren().get(childPos + 1))) { // comply min key rule
+                borrowFromRight(node, childPos);
+
+            } else { // violate min key rule
+                mergeNode(node, childPos + 1, childPos);
+            }
+        } else if (childPos == node.getKeyList().size()) { // not exist right sibling
+            if (checkMinKey(node.getChildren().get(childPos - 1))) {// comply min key rule
+                borrowFromLeft(node, childPos);
+            } else { //violate
+                mergeNode(node, childPos, childPos - 1);
+            }
+        } else { // exist right, left sibling
+            if (checkMinKey(node.getChildren().get(childPos - 1))) {// use left sibling
+                borrowFromLeft(node, childPos);
+            } else if (checkMinKey(node.getChildren().get(childPos + 1))) { // use right sibling
+                borrowFromRight(node, childPos);
+            } else {
+                // violate, merge with left sibling
+                mergeNode(node, childPos, childPos - 1);
+            }
+        }
+    }
+
     // #deleteInNode
     public void deleteKey(MyNode node, Integer key) {
-        if (node.isLeaf) {
-            // leaf
+        // leaf
+        if (node.getKeyList().indexOf(key) == 0) { // 부모 노드 갱신
+            updateParent(node.getParent(), key, node.getKeyList().get(1));
+        }
+        node.getKeyList().remove(key);
+        while (node.getParent() != null) {
             if (node.getKeyList().size() < min_keys) { //min key 규칙 위반
-                //TODO balancing
-            } else {
-                if (node.getKeyList().indexOf(key) == 0) { // 부모 노드 갱신
-                    updateParent(node.getParent(), key, node.getKeyList().get(1));
-                }
+                balancing(node.getParent(), node.getParent().getChildren().indexOf(node));
             }
-            node.getKeyList().remove(key);
-        } else {
-            // not leaf
+            node = node.getParent();
         }
     }
 
@@ -187,10 +272,6 @@ public class MyTree implements NavigableSet<Integer> {
 
     public MyNode getRoot() {
         return root;
-    }
-
-    public List<MyNode> getLeafList() {
-        return leafList;
     }
 
     // # insertNode
@@ -236,12 +317,10 @@ public class MyTree implements NavigableSet<Integer> {
             MyNode node,
             MyNode parent
     ) {
-        // TODO split시 middle index 수식 확인
         int middle = (int) Math.ceil((this.m - 1) / 2.);
         MyNode newNode = new MyNode(); // 새로운 자식노드
         newNode.isLeaf = node.isLeaf; // 새로운 노드 isLeaf는 기존 노드와 동일
 
-        // TODO 반복문 수정 (밑의 로직 까지)
         // i는 계속 일정한 숫자이고 size가 줄어드는 방식 이용
         if (node.isLeaf) {
             // middle 포함해서 right, left로 분리
@@ -396,6 +475,7 @@ public class MyTree implements NavigableSet<Integer> {
         if (target != null) {
             // 빈 트리가 아니고 삭제할 노드를 찾았을 때
             deleteKey(target, (Integer) o);
+            size--;
             return true;
         }
         return false;
