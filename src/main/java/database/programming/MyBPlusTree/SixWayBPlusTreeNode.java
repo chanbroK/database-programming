@@ -1,43 +1,43 @@
-package org.dfpl.lecture.database.assignment2.assignment17011685.mytree;
+package database.programming.MyBPlusTree;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyNode {
+public class SixWayBPlusTreeNode {
 
     boolean isLeaf;
-    private MyNode parent;
+    private SixWayBPlusTreeNode parent;
     private List<Integer> keyList;
-    private List<MyNode> children;
+    private List<SixWayBPlusTreeNode> children;
 
-    public MyNode() {
+    public SixWayBPlusTreeNode() {
         keyList = new ArrayList<Integer>();
-        children = new ArrayList<MyNode>();
+        children = new ArrayList<SixWayBPlusTreeNode>();
         isLeaf = true;
         parent = null;
     }
 
-    public MyNode(int val) {
+    public SixWayBPlusTreeNode(int val) {
         keyList = new ArrayList<Integer>();
-        children = new ArrayList<MyNode>();
+        children = new ArrayList<SixWayBPlusTreeNode>();
         isLeaf = false;
         parent = null;
         keyList.add(val);
     }
 
-    public MyNode getParent() {
+    public SixWayBPlusTreeNode getParent() {
         return parent;
     }
 
-    public void setParent(MyNode parent) {
+    public void setParent(SixWayBPlusTreeNode parent) {
         this.parent = parent;
     }
 
-    public List<MyNode> getChildren() {
+    public List<SixWayBPlusTreeNode> getChildren() {
         return children;
     }
 
-    public void setChildren(List<MyNode> children) {
+    public void setChildren(List<SixWayBPlusTreeNode> children) {
         this.children = children;
     }
 

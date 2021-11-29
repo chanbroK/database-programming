@@ -1,25 +1,25 @@
-package org.dfpl.lecture.database.assignment2.assignment17011685.mytree;
+package database.programming.MyBPlusTree;
 
 import java.util.*;
 
 public class App {
 
     public static void main(String[] args) {
-        for (int x = 0; x < 10000; x++) {
-//        System.out.println("Assignment 4: ");
-//        MyTree bpTree = new MyTree();
-//        int size = 22;
-//        for (int i = 1; i < size; i++) {
-//            bpTree.add(i);
-//        }
+        for (int x = 0; x < 100000; x++) {
+//            System.out.println("Assignment 4: ");
+//            SixWayBPlusTree bpTree = new SixWayBPlusTree();
+//            int size = 22;
+//            for (int i = 1; i < size; i++) {
+//                bpTree.add(i);
+//            }
 //
-//        bpTree.getNode(11);
-//        System.out.println();
-//        bpTree.getNode(22);
-//        System.out.println();
-//        bpTree.inorderTraverse();
+//            bpTree.getNode(11);
+//            System.out.println();
+//            bpTree.getNode(22);
+//            System.out.println();
+//            bpTree.inorderTraverse();
 //
-//        System.out.println("Assignment 5: ");
+//            System.out.println("Assignment 5: ");
 
             ArrayList<Integer> list = new ArrayList<Integer>();
             Random r = new Random();
@@ -31,7 +31,7 @@ public class App {
                 treeSet.add(val);
             }
 
-            NavigableSet<Integer> yourBTree = new MyTree();
+            NavigableSet<Integer> yourBTree = new SixWayBPlusTree();
             for (Integer val : list) {
                 yourBTree.add(val);
             }
@@ -39,35 +39,11 @@ public class App {
             isPass = treeSet.first().equals(yourBTree.first());
             if (!isPass) {
                 System.out.println("first test: " + treeSet.first().equals(yourBTree.first()));
-                list.sort((o1, o2) -> {
-                    if (o1 > o2) {
-                        return 1;
-                    } else if (o1 < o2) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-                System.out.println(list);
-                MyTree t = (MyTree) yourBTree;
-                t.printTree(t.getRoot(), 0);
                 return;
             }
             isPass = treeSet.last().equals(yourBTree.last());
             if (!isPass) {
                 System.out.println("last test: " + treeSet.last().equals(yourBTree.last()));
-                list.sort((o1, o2) -> {
-                    if (o1 > o2) {
-                        return 1;
-                    } else if (o1 < o2) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-                System.out.println(list);
-                MyTree t = (MyTree) yourBTree;
-                t.printTree(t.getRoot(), 0);
                 return;
             }
             Iterator<Integer> treeIterator = treeSet.iterator();
@@ -83,18 +59,6 @@ public class App {
             }
             if (!isPass) {
                 System.out.println("iterator test: " + isPass);
-                list.sort((o1, o2) -> {
-                    if (o1 > o2) {
-                        return 1;
-                    } else if (o1 < o2) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-                System.out.println(list);
-                MyTree t = (MyTree) yourBTree;
-                t.printTree(t.getRoot(), 0);
                 return;
             }
             ArrayList<Integer> removelist = new ArrayList<>();
@@ -109,7 +73,6 @@ public class App {
             while (treeIterator.hasNext() && yourBTreeIterator.hasNext()) {
                 Integer a = treeIterator.next();
                 Integer b = yourBTreeIterator.next();
-                System.out.println(a + " : " + b);
                 if (!a.equals(b)) {
                     isPass = false;
                     break;
@@ -118,19 +81,6 @@ public class App {
 
             if (!isPass) {
                 System.out.println("remove test: " + isPass);
-                list.sort((o1, o2) -> {
-                    if (o1 > o2) {
-                        return 1;
-                    } else if (o1 < o2) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                });
-                System.out.println(removelist);
-                System.out.println(list);
-                MyTree t = (MyTree) yourBTree;
-                t.printTree(t.getRoot(), 0);
                 return;
             }
         }

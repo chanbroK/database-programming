@@ -5,22 +5,26 @@ import java.util.List;
 
 public class SixWayBPlusTreeNode {
 
-    final protected int maxKey = 6;
-    // TODO leftSibling 과 rightSibling 을 필요할때 구해서 사용하자
-    protected SixWayBPlusTreeNode leftSibling;
-    protected SixWayBPlusTreeNode rightSibling;
-    // Data Abstraction은 예시일 뿐 자유롭게 B+ Tree의 범주 안에서 어느정도 수정가능
-    protected SixWayBPlusTreeNode parent;
-    protected List<Integer> keyList;
+    boolean isLeaf;
+    private SixWayBPlusTreeNode parent;
+    private List<Integer> keyList;
+    private List<SixWayBPlusTreeNode> children;
 
     public SixWayBPlusTreeNode() {
-        this.keyList = new ArrayList<>();
-        this.parent = null;
-        this.leftSibling = null;
-        this.rightSibling = null;
+        keyList = new ArrayList<Integer>();
+        children = new ArrayList<SixWayBPlusTreeNode>();
+        isLeaf = true;
+        parent = null;
     }
 
-    // Getters and Setters
+    public SixWayBPlusTreeNode(int val) {
+        keyList = new ArrayList<Integer>();
+        children = new ArrayList<SixWayBPlusTreeNode>();
+        isLeaf = false;
+        parent = null;
+        keyList.add(val);
+    }
+
     public SixWayBPlusTreeNode getParent() {
         return parent;
     }
@@ -29,33 +33,19 @@ public class SixWayBPlusTreeNode {
         this.parent = parent;
     }
 
+    public List<SixWayBPlusTreeNode> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<SixWayBPlusTreeNode> children) {
+        this.children = children;
+    }
+
     public List<Integer> getKeyList() {
         return keyList;
     }
 
     public void setKeyList(List<Integer> keyList) {
         this.keyList = keyList;
-    }
-
-    public SixWayBPlusTreeNode getLeftSibling() {
-        return leftSibling;
-    }
-
-    public void setLeftSibling(SixWayBPlusTreeNode leftSibling) {
-        this.leftSibling = leftSibling;
-    }
-
-    public SixWayBPlusTreeNode getRightSibling() {
-        return rightSibling;
-    }
-
-    public void setRightSibling(SixWayBPlusTreeNode rightSibling) {
-        this.rightSibling = rightSibling;
-    }
-
-    // KeyList 가 가득 찼는지 확인
-    public boolean isOverflow() {
-        // TODO isOverflow -> isFull , 조건문 수정
-        return this.keyList.size() == this.maxKey;
     }
 }

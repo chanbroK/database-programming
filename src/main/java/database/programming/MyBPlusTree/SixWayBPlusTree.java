@@ -1,21 +1,22 @@
-package org.dfpl.lecture.database.assignment2.assignment17011685.mytree;
+package database.programming.MyBPlusTree;
+
 
 import java.util.*;
 
-// TODO 주석 최대한 영어로
-public class MyTree implements NavigableSet<Integer> {
+// TODO 주석 최대한 영어로 수정하기 add 부분
+public class SixWayBPlusTree implements NavigableSet<Integer> {
 
     // Data Abstraction은 예시일 뿐 자유롭게 B+ Tree의 범주 안에서 어느정도 수정가능
     final int m = 6;
     final int max_children = m;
     final int max_keys = m - 1;
     final int min_keys = (int) (Math.ceil(m / 2.)) - 1;
-    private final LinkedList<MyNode> leafList;
-    private MyNode root;
+    private final LinkedList<SixWayBPlusTreeNode> leafList;
+    private SixWayBPlusTreeNode root;
     private int size;
 
     // Constructor
-    public MyTree() {
+    public SixWayBPlusTree() {
         root = null;
         size = 0;
         leafList = new LinkedList<>();
@@ -46,29 +47,29 @@ public class MyTree implements NavigableSet<Integer> {
      * @param key
      * @return
      */
-    public MyNode getNode(Integer key) {
-        MyNode node = root;
+    public SixWayBPlusTreeNode getNode(Integer key) {
+        SixWayBPlusTreeNode node = root;
         while (true) {
             int pos;
             for (pos = 0; pos < node.getKeyList().size(); pos++) {
                 if (node.getKeyList().get(pos).equals(key) && node.isLeaf) {
-                    // 리프노드일때 종료
+                    // return in leaf node
                     System.out.println(key + " found");
                     return node;
                 } else if (node.getKeyList().get(pos) > key && !node.isLeaf) {
-                    // 왼쪽 자식 노드로 이동
+                    // move to left child node
                     System.out.println("less than to " + node.getKeyList().get(pos));
                     node = node.getChildren().get(pos);
                     pos = -1;
                 }
-                // pos 이동
+                // move pos
             }
             if (node.isLeaf) {
-                // 찾지 못함
+                // not found
                 System.out.println(key + " not found");
                 return null;
             }
-            // 오른쪽 자식 노드로 이동
+            // move to right child node
             System.out.println("larger than or equal to " + node.getKeyList().get(pos - 1));
             node = node.getChildren().get(pos);
         }
@@ -111,12 +112,12 @@ public class MyTree implements NavigableSet<Integer> {
     /////////#helper/////////
     /////////////////////////
     // #checkMinKey
-    public boolean checkMinKey(MyNode node) {
+    public boolean checkMinKey(SixWayBPlusTreeNode node) {
         return node.getKeyList().size() > min_keys;
     }
 
     // #recursiveInorderTraverse
-    public void recursiveInorderTraverse(MyNode node) {
+    public void recursiveInorderTraverse(SixWayBPlusTreeNode node) {
         if (node == null) {
             System.out.println("Empty");
         } else {
@@ -132,7 +133,7 @@ public class MyTree implements NavigableSet<Integer> {
     }
 
     // #updateParent
-    public void updateParent(MyNode node, Integer oldKey, Integer newKey) {
+    public void updateParent(SixWayBPlusTreeNode node, Integer oldKey, Integer newKey) {
         if (node != null) {
             if (node.getKeyList().contains(oldKey)) {
                 node.getKeyList().set(node.getKeyList().indexOf(oldKey), newKey);
@@ -143,7 +144,7 @@ public class MyTree implements NavigableSet<Integer> {
     }
 
     // #borrowFromLeft
-    public void borrowFromLeft(MyNode node, int pos) {
+    public void borrowFromLeft(SixWayBPlusTreeNode node, int pos) {
         Integer PLV = node.getKeyList().get(pos - 1);
         int size = node.getChildren().get(pos - 1).getKeyList().size(); // left sibling key size
         Integer LV = node.getChildren().get(pos - 1).getKeyList().get(size - 1);
@@ -156,7 +157,7 @@ public class MyTree implements NavigableSet<Integer> {
         } else {
             //move child
             size = node.getChildren().get(pos - 1).getChildren().size();
-            MyNode LC = node.getChildren().get(pos - 1).getChildren().get(size - 1);
+            SixWayBPlusTreeNode LC = node.getChildren().get(pos - 1).getChildren().get(size - 1);
             node.getChildren().get(pos).getChildren().add(0, LC);
             LC.setParent(node.getChildren().get(pos));
             node.getChildren().get(pos - 1).getChildren().remove(LC);
@@ -164,7 +165,7 @@ public class MyTree implements NavigableSet<Integer> {
     }
 
     // #borrowFromRight
-    public void borrowFromRight(MyNode node, int pos) {
+    public void borrowFromRight(SixWayBPlusTreeNode node, int pos) {
         // move key
         Integer PRV = node.getKeyList().get(pos);
         Integer RV = node.getChildren().get(pos + 1).getKeyList().get(0);
@@ -176,7 +177,7 @@ public class MyTree implements NavigableSet<Integer> {
             updateParent(node, RV, node.getChildren().get(pos + 1).getKeyList().get(0));
         } else {
             //move child
-            MyNode RC = node.getChildren().get(pos + 1).getChildren().get(0);
+            SixWayBPlusTreeNode RC = node.getChildren().get(pos + 1).getChildren().get(0);
             node.getChildren().get(pos).getChildren().add(RC);
             RC.setParent(node.getChildren().get(pos));
             node.getChildren().get(pos + 1).getChildren().remove(RC);
@@ -184,23 +185,30 @@ public class MyTree implements NavigableSet<Integer> {
     }
 
     // #mergeNode
-    public void mergeNode(MyNode node, int rightPos, int leftPos) {
+    public void mergeNode(SixWayBPlusTreeNode node, int rightPos, int leftPos) {
         // merging at left child
-        MyNode RC = node.getChildren().get(rightPos);
-        MyNode LC = node.getChildren().get(leftPos);
+        SixWayBPlusTreeNode RC = node.getChildren().get(rightPos);
+        SixWayBPlusTreeNode LC = node.getChildren().get(leftPos);
+        if (!RC.isLeaf) {
+            // merge in no leaf
+            LC.getKeyList().add(node.getKeyList().get(leftPos));
+        }
         LC.getKeyList().addAll(RC.getKeyList()); // move RC key list to LC
         LC.getChildren().addAll(RC.getChildren()); // move RC child list to LC
-        for (MyNode child : RC.getChildren()) {
+        for (SixWayBPlusTreeNode child : RC.getChildren()) {
             child.setParent(LC);
         }
         //clear
         node.getChildren().remove(RC);
         node.getKeyList().remove(leftPos);
         leafList.remove(RC);
+        if (root == node && root.getChildren().size() == 1) {
+            root = LC;
+        }
     }
 
     // #balancing
-    public void balancing(MyNode node, int childPos) {// borrow or merge
+    public void balancing(SixWayBPlusTreeNode node, int childPos) {// borrow or merge
         if (childPos == 0) { // not exist left sibling
             if (checkMinKey(node.getChildren().get(childPos + 1))) { // comply min key rule
                 borrowFromRight(node, childPos);
@@ -227,14 +235,14 @@ public class MyTree implements NavigableSet<Integer> {
     }
 
     // #deleteInNode
-    public void deleteKey(MyNode node, Integer key) {
+    public void deleteKey(SixWayBPlusTreeNode node, Integer key) {
         // leaf
-        if (node.getKeyList().indexOf(key) == 0) { // 부모 노드 갱신
+        if (node.getKeyList().indexOf(key) == 0) { // update parent node key
             updateParent(node.getParent(), key, node.getKeyList().get(1));
         }
         node.getKeyList().remove(key);
         while (node.getParent() != null) {
-            if (node.getKeyList().size() < min_keys) { //min key 규칙 위반
+            if (node.getKeyList().size() < min_keys) { //violate min key rule
                 balancing(node.getParent(), node.getParent().getChildren().indexOf(node));
             }
             node = node.getParent();
@@ -242,50 +250,50 @@ public class MyTree implements NavigableSet<Integer> {
     }
 
     // #findNode
-    public MyNode findNode(Integer key) {
-        MyNode node = root;
+    public SixWayBPlusTreeNode findNode(Integer key) {
+        SixWayBPlusTreeNode node = root;
         if (root == null) {
-            // 빈 트리
+            // empty
             return null;
         }
         while (true) {
             int pos;
             for (pos = 0; pos < node.getKeyList().size(); pos++) {
                 if (node.getKeyList().get(pos).equals(key) && node.isLeaf) {
-                    // 리프노드일때 종료
+                    // return in leaf node
                     return node;
                 } else if (node.getKeyList().get(pos) > key && !node.isLeaf) {
-                    // 왼쪽 자식 노드로 이동
+                    // move to left child node
                     node = node.getChildren().get(pos);
                     pos = -1;
                 }
-                // pos 이동
+                // move pos
             }
             if (node.isLeaf) {
-                // 찾지 못함
+                // not found
                 return null;
             }
-            // 오른쪽 자식 노드로 이동
+            // move to right child node
             node = node.getChildren().get(pos);
         }
     }
 
-    public MyNode getRoot() {
+    public SixWayBPlusTreeNode getRoot() {
         return root;
     }
 
     // # insertNode
-    public MyNode insertNode(
+    public SixWayBPlusTreeNode insertNode(
             int parent_pos,
             int val,
-            MyNode node,
-            MyNode parent
+            SixWayBPlusTreeNode node,
+            SixWayBPlusTreeNode parent
     ) {
         // search pos
         int pos;
         for (pos = 0; pos < node.getKeyList().size(); pos++) { // 해당 KeyList에서 val 보다 높은 값 위치 찾기
             if (val == node.getKeyList().get(pos)) {
-                // 중복 허용 X
+                // no duplicate key
                 size--;
                 return node;
             } else if (val < node.getKeyList().get(pos)) { // val가 큰 값을 만났을때 정지
@@ -295,30 +303,31 @@ public class MyTree implements NavigableSet<Integer> {
         if (!node.isLeaf) { // leaf가 아니면 오른쪽 자식으로 이동(재귀)
             node
                     .getChildren()
-                    .set(pos, insertNode(pos, val, node.getChildren().get(pos), node)); // 재귀를 통해 함수에서 반환되는 노드를 자식 노드로 연결
+                    .set(pos, insertNode(pos, val, node.getChildren().get(pos), node));
+            // 재귀를 통해 함수에서 반환되는 노드를 자식 노드로 연결
             // 자식 노드가 추가되었을 수 있음
-            if (node.getKeyList().size() == max_keys + 1) { // 최대키 규칙 위반
+            if (node.getKeyList().size() == max_keys + 1) { // violate max key rule
                 // node split
                 node = splitNode(parent_pos, node, parent);
             }
-        } else { // leaf면 삽입
+        } else { // insert if leaf
             node.getKeyList().add(pos, val);
-            if (node.getKeyList().size() == max_keys + 1) { // 최대키 규칙 위반
+            if (node.getKeyList().size() == max_keys + 1) { // violate max key rule
                 // node split
                 node = splitNode(parent_pos, node, parent);
             }
         }
-        return node; // 재귀를 하며 자식을 연결하기 위해 현재 노드 반환
+        return node; // return current node to connect child node by recursive
     }
 
     // #splitNode
-    public MyNode splitNode(
+    public SixWayBPlusTreeNode splitNode(
             int pos,
-            MyNode node,
-            MyNode parent
+            SixWayBPlusTreeNode node,
+            SixWayBPlusTreeNode parent
     ) {
         int middle = (int) Math.ceil((this.m - 1) / 2.);
-        MyNode newNode = new MyNode(); // 새로운 자식노드
+        SixWayBPlusTreeNode newNode = new SixWayBPlusTreeNode(); // 새로운 자식노드
         newNode.isLeaf = node.isLeaf; // 새로운 노드 isLeaf는 기존 노드와 동일
 
         // i는 계속 일정한 숫자이고 size가 줄어드는 방식 이용
@@ -358,7 +367,7 @@ public class MyTree implements NavigableSet<Integer> {
 
         // 부모노드 처리
         if (node == root) { // 새로운 부모 생성
-            MyNode newParent = new MyNode(node.getKeyList().get(middle)); // middle -> root
+            SixWayBPlusTreeNode newParent = new SixWayBPlusTreeNode(node.getKeyList().get(middle)); // middle -> root
             node.getKeyList().remove(middle);
             newParent.getChildren().add(node);
             node.setParent(newParent);
@@ -377,14 +386,14 @@ public class MyTree implements NavigableSet<Integer> {
             }
             parent.getKeyList().add(pos, node.getKeyList().get(middle));
             node.getKeyList().remove(middle);
-            parent.getChildren().add(pos + 1, newNode); // 오른쪽만 부모노드에 연결
+            parent.getChildren().add(pos + 1, newNode); // right node connect to parent node
             newNode.setParent(parent);
         }
-        return node; // 재귀를 위해
+        return node; // to recursive
     }
 
     // #printTree
-    public void printTree(MyNode node, int level) {
+    public void printTree(SixWayBPlusTreeNode node, int level) {
         if (node == null) {
             System.out.println("Empty");
         } else {
@@ -392,7 +401,7 @@ public class MyTree implements NavigableSet<Integer> {
             for (int i = 0; i < node.getKeyList().size(); i++) {
                 System.out.printf("|%d|", node.getKeyList().get(i));
             }
-            System.out.printf("\n");
+            System.out.print("\n");
             level++;
             for (int i = 0; i < node.getChildren().size(); i++) {
                 printTree(node.getChildren().get(i), level);
@@ -409,7 +418,7 @@ public class MyTree implements NavigableSet<Integer> {
 
     @Override
     public Integer first() {
-        MyNode node = root;
+        SixWayBPlusTreeNode node = root;
         while (!node.isLeaf) {
             node = node.getChildren().get(0);
         }
@@ -418,7 +427,7 @@ public class MyTree implements NavigableSet<Integer> {
 
     @Override
     public Integer last() {
-        MyNode node = root;
+        SixWayBPlusTreeNode node = root;
         while (!node.isLeaf) {
             node = node.getChildren().get(node.getChildren().size() - 1);
         }
@@ -459,7 +468,7 @@ public class MyTree implements NavigableSet<Integer> {
     public boolean add(Integer e) {
         size++;
         if (root == null) {
-            root = new MyNode(e);
+            root = new SixWayBPlusTreeNode(e);
             root.isLeaf = true;
             leafList.add(root);
         } else {
@@ -471,9 +480,9 @@ public class MyTree implements NavigableSet<Integer> {
 
     @Override
     public boolean remove(Object o) {
-        MyNode target = findNode((Integer) o);
+        SixWayBPlusTreeNode target = findNode((Integer) o);
         if (target != null) {
-            // 빈 트리가 아니고 삭제할 노드를 찾았을 때
+            // not empty tree and find target node
             deleteKey(target, (Integer) o);
             size--;
             return true;
@@ -603,11 +612,11 @@ public class MyTree implements NavigableSet<Integer> {
     }
 
     class BPlusTreeIterator implements Iterator<Integer> {
-        MyNode curNode;
+        SixWayBPlusTreeNode curNode;
         int keyIdx;
         int listIdx;
 
-        public BPlusTreeIterator() { // 시작점 : 최소값
+        public BPlusTreeIterator() { // start in minimum key(first)
             keyIdx = 0;
             listIdx = 0;
             curNode = leafList.get(listIdx);
