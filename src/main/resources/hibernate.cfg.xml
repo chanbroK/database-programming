@@ -20,11 +20,11 @@
         <!-- Echo all executed SQL to stdout -->
         <property name='show_sql'>true</property>
 
-        <!--
-        <mapping resource="DBUser.hbm.xml"></mapping>
-        -->
 
-        <mapping class="database.programming.week13.DBUser"></mapping>
+        <mapping resource="DBUser.hbm.xml"/>
+
+
+        <mapping class="database.programming.week14.DBUser"/>
 
     </session-factory>
 </hibernate-configuration>

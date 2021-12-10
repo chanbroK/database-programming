@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="database.programming.week13.DBUser" table="DBUSER">
+    <class name="database.programming.week14.DBUser" table="DBUSER">
         <id name="userId" type="int">
             <column name="USER_ID" precision="5" scale="0"/>
             <generator class="assigned"/>
